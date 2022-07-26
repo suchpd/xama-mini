@@ -26,6 +26,7 @@ Page({
 				fail: res => {
 						wx.showToast({
 							title: '登录失败',
+							icon:'error'
 						})
 				}
 			})
