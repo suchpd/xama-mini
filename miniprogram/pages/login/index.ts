@@ -92,6 +92,7 @@ Page({
 					const requestUrl = `${app.globalData.apiUrl}api/miniProgram/miniProgramLogin`;
 					wx.request({
 						url: requestUrl,
+						method:"POST",
 						data: {
 							code: res.code
 						},
