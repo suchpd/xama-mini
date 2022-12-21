@@ -3,7 +3,7 @@
 interface IAppOption {
   globalData: {
 		userInfo?: WechatMiniprogram.UserInfo,
-		apiUrl?:"http://1.15.172.245:8090/",
+		apiUrl?:"https://backendapi.xama.vip/",
 		sessionKey?:null
   }
   userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,

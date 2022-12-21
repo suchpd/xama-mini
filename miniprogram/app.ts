@@ -1,7 +1,8 @@
 // app.ts
 App<IAppOption>({
   globalData: {
-		apiUrl:"http://localhost:8090/"
+		apiUrl:"https://backendapi.xama.vip/"
+		// apiUrl:"http://localhost:8090/"
 	},
   onLaunch() {
     // 展示本地存储能力
