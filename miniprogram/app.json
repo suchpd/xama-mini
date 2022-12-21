@@ -1,9 +1,9 @@
 {
 	"pages": [
+		"pages/login/index",
 		"pages/minedata/index",
 		"pages/mydream/index",
-		"pages/tadream/index",
-		"pages/login/index"
+		"pages/tadream/index"
 	],
 	"window": {
 		"backgroundTextStyle": "light",

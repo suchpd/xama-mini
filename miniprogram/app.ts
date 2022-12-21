@@ -13,12 +13,11 @@ App<IAppOption>({
 		const sessionKey = wx.getStorageSync('sessionKey') || null;
 
 		//未登录跳转至登录界面
-		if(sessionKey == null){
-			wx.navigateTo({
-        url: 'pages/login/index',
-      })
-		}else{
+		if(sessionKey != null){
 			this.globalData.sessionKey = sessionKey;
+			wx.switchTab({
+				url: '/pages/minedata/index'
+			});
 		}
   },
 })
