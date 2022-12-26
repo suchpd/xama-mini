@@ -1,3 +1,6 @@
+import { Tools } from "../../utils/commonTool";
+import { ApiClient } from "../../utils/httpRequest";
+
 // pages/login/index.ts
 var app = getApp<IAppOption>()
 Page({
@@ -15,22 +18,6 @@ Page({
 	onLoad(options) {
 
 	},
-	login(){
-			wx.getUserProfile({
-				desc: '使用户得到更好的体验',
-				success: (res) => {
-					let user = res.userInfo
-					wx.setStorageSync('user', user)
-					this.doLogin()
-				},
-				fail: res => {
-						wx.showToast({
-							title: '登录失败',
-							icon:'error'
-						})
-				}
-			})
-		},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
 	 */
@@ -81,66 +68,70 @@ Page({
 	},
 
 	/**
+	 * 授权
+	 */
+	authorization() {
+		Tools.showLoading("加载中");
+		wx.getUserProfile({
+			desc: '使用户得到更好的体验',
+			success: (res) => {
+				let user = res.userInfo
+				wx.setStorageSync('user', user)
+				Tools.hideLoading();
+				this.login()
+			},
+			fail: res => {
+				Tools.hideLoading();
+				wx.showToast({
+					title: '登录失败',
+					icon: 'error'
+				})
+			}
+		})
+	},
+
+	/**
 	 * 登录
 	 */
-	doLogin(){
-	
-    // 登录
-    wx.login({
-      success: res => {
-				if(res.code){
-					//发起网络请求
-					const requestUrl = `${app.globalData.apiUrl}api/miniProgram/miniProgramLogin`;
-					wx.request({
-						url: requestUrl,
-						method:"POST",
-						data: {
-							code: res.code
-						},
-						success (res) {
-							console.log("登录成功！")
-							console.log(res.data)
-							
-							var datax;
-							if (typeof (res.data) == "string") {
-								var result = res.data.replace(/\(|\)/g, "");
-								console.log("result:" + result);
-								var obj: object = JSON.parse(result);
-								console.log("obj:" + (typeof obj));
-								datax = obj as Record<string, any>;
-							} else {
-									datax = res.data as Record<string, any>;
-							}
-							
-							console.log(datax.sessionKey)
-							wx.setStorage({
-								key:"sessionKey",
-								data:datax.sessionKey
-							})
-							wx.setStorage({
-								key:"openid",
-								data:datax.openid
-							})
+	login() {
 
+		Tools.showLoading("登录中");
 
-							wx.showToast({
-								icon:"success",
-								title: '登录成功',
-							})
-						setTimeout(()=>{
+		// 登录
+		wx.login({
+			success: res => {
+				if (res.code) {
+					ApiClient.post("miniProgram/miniProgramLogin", {
+						code: res.code
+					}).then((res: any) => {
+						Tools.hideLoading();
+
+						wx.setStorage({
+							key: "sessionKey",
+							data: res.sessionKey
+						})
+						wx.setStorage({
+							key: "openid",
+							data: res.openid
+						})
+
+						Tools.hideLoading();
+						Tools.showToast("success",'登录成功');
+						setTimeout(() => {
 							wx.switchTab({
 								url: '/pages/minedata/index'
 							});
-						},2000)
-						}
+						}, 1000)
+					}, (error) => {
+						console.log("登陆失败" + error)
 					})
-				}else{
+				} else {
 					console.log("登录失败！" + res.errMsg)
 				}
-		
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+
+				// 发送 res.code 到后台换取 openId, sessionKey, unionId
 			},
-	
-    })
-	}
+
+		})
+	},
 })

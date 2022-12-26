@@ -1,5 +1,6 @@
 // app.ts
 App<IAppOption>({
+	
   globalData: {
 		apiUrl:"https://backendapi.xama.vip/"
 		// apiUrl:"http://localhost:8090/"
@@ -13,11 +14,11 @@ App<IAppOption>({
 		const sessionKey = wx.getStorageSync('sessionKey') || null;
 
 		//未登录跳转至登录界面
-		if(sessionKey != null){
-			this.globalData.sessionKey = sessionKey;
-			wx.switchTab({
-				url: '/pages/minedata/index'
-			});
-		}
+		// if(sessionKey != null){
+		// 	this.globalData.sessionKey = sessionKey;
+		// 	wx.switchTab({
+		// 		url: '/pages/minedata/index'
+		// 	});
+		// }
   },
 })
