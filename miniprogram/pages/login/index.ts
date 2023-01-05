@@ -76,7 +76,7 @@ Page({
 			desc: '使用户得到更好的体验',
 			success: (res) => {
 				let user = res.userInfo
-				wx.setStorageSync('user', user)
+				wx.setStorageSync('USER', user)
 				Tools.hideLoading();
 				this.login()
 			},
@@ -106,14 +106,9 @@ Page({
 					}).then((res: any) => {
 						Tools.hideLoading();
 
-						wx.setStorage({
-							key: "sessionKey",
-							data: res.sessionKey
-						})
-						wx.setStorage({
-							key: "openid",
-							data: res.openid
-						})
+						wx.setStorageSync('SESSION_KEY',res.sessionKey);
+						wx.setStorageSync('OPEN_ID',res.openId);
+						wx.setStorageSync('EXPIRED_TIME',(new Date().getTime() + 24 * 60 * 60 * 1000))
 
 						Tools.hideLoading();
 						Tools.showToast("success",'登录成功');
